@@ -1,0 +1,15 @@
+WITH cte AS (
+	SELECT OrderDateKey
+	,sum(SalesAmount) as sum_sales
+	,avg(SalesAmount) as avg_sales
+	FROM FactInternetSales 
+	
+	GROUP BY OrderDateKey 
+)
+
+SELECT OrderDateKey
+	,sum_sales
+	,avg_sales
+	,AVG(avg_sales) OVER (ORDER BY OrderDateKey ROWS BETWEEN 3 PRECEDING AND CURRENT ROW) as rolling_avg
+FROM cte
+ORDER BY OrderDateKey;

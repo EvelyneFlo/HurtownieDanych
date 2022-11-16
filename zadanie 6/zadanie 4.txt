@@ -1,0 +1,6 @@
+SELECT OrganizationKey
+	,DepartmentGroupKey
+	,SUM(Amount) as amount
+FROM FactFinance 
+GROUP BY CUBE(OrganizationKey, DepartmentGroupKey) 
+ORDER BY OrganizationKey

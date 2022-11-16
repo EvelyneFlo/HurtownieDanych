@@ -1,0 +1,17 @@
+WITH cte as (
+	SELECT OrganizationKey
+		,SUM(Amount) as year_sum 
+	FROM FactFinance 
+	WHERE year(Date) = 2012 
+	GROUP BY OrganizationKey 
+)
+
+SELECT 	cte.OrganizationKey
+	,do.OrganizationName
+	,cte.year_sum
+	,PERCENT_RANK() OVER (ORDER BY year_sum) as percentile	
+	,STDEV(year_sum) OVER (ORDER BY cte.OrganizationKey) as std
+FROM cte
+
+JOIN DimOrganization do ON do.OrganizationKey = cte.OrganizationKey
+ORDER BY OrganizationKey
